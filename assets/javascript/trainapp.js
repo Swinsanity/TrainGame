@@ -43,6 +43,51 @@ $("#addTrainButton").on("click", function(event) {
     $("#frequency").val("");
 
 });
+
+database.ref().on("child_added", function(childSnapshot) {
+    console.log(childSnapshot.val());
+
+    var trainName = childSnapshot.val().name;
+    var trainDest = childSnapshot.val().dest;
+    var trainTime = childSnapshot.val().time;
+    var trainFreq = childSnapshot.val().freq;
+
+    console.log(trainName)
+    console.log(trainDest)
+    console.log(trainTime)
+    console.log(trainFreq)
+
+    var firstTime = moment(trainTime, "HH:mm").subtract(1, "years");
+    console.log(firstTime);
+
+    var currentTime = moment();
+    
+    var timeDifference = moment().diff(moment(firstTime), "minutes");
+    console.log("Time Difference: " + timeDifference);
+
+    var timeRemain = timeDifference % trainFreq
+    console.log(timeRemain)
+
+    var trainMinutes = trainFreq - timeRemain;
+    console.log("Minutes Until Next Train: " + trainMinutes)
+
+    var nextTrain = moment().add(trainMinutes, "minutes").format("hh:mm a");
+    console.log("Train will arrive: " + moment(nextTrain).format("hh:mm"));
+
+    var newRow = $("<tr>").append(
+        $("<td>").text(trainName),
+        $("<td>").text(trainDest),
+        $("<td>").text(trainFreq),
+        $("<td>").text(nextTrain),
+        $("<td>").text(nextTrain)
+    );
+
+    $("#train-table > tbody").append(newRow);
+
+
+
+
+});
 // Was messing around with Firebase 
 // database.ref().push({
 //     Name: "Bernice",
