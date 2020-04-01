@@ -12,20 +12,52 @@ firebase.initializeApp(firebaseConfig);
 
 var database = firebase.database();
 
-database.ref().push({
-    Name: "Bob",
-    Age: 28
-})
+var now = moment();
+console.log("CURRENT TIME: " + moment(now).format("hh:mm a"));
 
-database.ref().once('value').then(function (snapshot) {
+$("#addTrainButton").on("click", function(event) {
+    event.preventDefault();
 
-    var obj = snapshot.val()
-    for (var key in obj) {
-        console.log(key)
-        console.log(obj[key])
-    }
-    // var key = snapshot.key
-    // console.log(key)
-    // console.log(value)
+    var trainName = $("#trainName").val().trim();
+    var destination = $("#destination").val().trim();
+    var firstTrainTime = $("#firstTrainTime").val().trim();
+    var frequency = $("#frequency").val().trim();
+
+    var newTrain = {
+        name: trainName,
+        dest: destination,
+        time: firstTrainTime,
+        freq: frequency,
+    };
+
+    database.ref().push(newTrain)
+    
+    console.log(newTrain.name)
+    console.log(newTrain.dest)
+    console.log(newTrain.time)
+    console.log(newTrain.freq)
+
+    $("#trainName").val("");
+    $("#destination").val("");
+    $("#firstTrainTime").val("");
+    $("#frequency").val("");
 
 });
+// Was messing around with Firebase 
+// database.ref().push({
+//     Name: "Bernice",
+//     Age: 42
+// })
+
+// database.ref().once('value').then(function (snapshot) {
+
+//     var obj = snapshot.val()
+//     for (var key in obj) {
+//         console.log(key)
+//         console.log(obj[key])
+//     }
+//     // var key = snapshot.key
+//     // console.log(key)
+//     // console.log(value)
+
+// });
